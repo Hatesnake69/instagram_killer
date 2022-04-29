@@ -30,9 +30,11 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('upload_file',
-                                    filename=filename))
-    return render_template('main.html')
+            return redirect(url_for('upload_file', filename=filename))
+    file_names: list[str] = os.listdir('static/uploads')
+    files: list[str] = [f'uploads/{filename}' for filename in file_names]
+
+    return render_template('main.html', files=file_names)
 
 
 if __name__ == '__main__':

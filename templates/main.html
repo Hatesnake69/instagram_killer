@@ -5,3 +5,13 @@
       <input type=file name=file>
       <input type=submit value=Upload>
     </form>
+    <h2> Photo gallery </h2>
+    {% for file in files %}
+    <div>
+        <img src="{{url_for('static', filename='uploads/' + file)}}" align="middle">
+    </div>
+    {% endfor %}
+    <br>
+    <div>
+        <img src="/uploads/logo.png" align="middle">
+    </div>
