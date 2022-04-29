@@ -8,7 +8,7 @@
     <h2> Photo gallery </h2>
     {% for file in files %}
     <div>
-        <img src="{{url_for('upload', filename=file)}}" align="middle">
+        <img src="{{url_for('static', filename='uploads/' + file)}}" align="middle">
     </div>
     {% endfor %}
     <br>
