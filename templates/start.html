@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Flask Dynamic Background in Bootstrap Jumbotron</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+  <main role="main">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 p-0">
+            <div class="jumbotron min-vh-100 text-center m-0 bg-info d-flex flex-column justify-content-center"
+			style="background-image: url({{url_for('static', filename='photo-1651103324862-b5003ba7ae34.jpg')}});
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: 100% 100% ">
+                <h1 class="display-4">Instagram-killer</h1>
+                <p class="lead">Here you can upload your image and smth more...</p>
+                <p class="lead">
+				<a class="btn btn-primary my-2" href="#" role="button">Upload</a>
+				<a class="btn btn-secondary my-2" href="#" role="button">Gallery</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </section>
+  </main>
+</body>
+</html>
