@@ -1,11 +1,11 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, render_template
+from flask import Flask, flash, request, redirect, url_for, render_template, send_from_directory
 
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -33,7 +33,24 @@ def upload_file():
             return redirect(url_for('upload_file',
                                     filename=filename))
     return render_template('main.html')
+    
+@app.route('/start', methods=['GET'])
+def show_start():
+    return render_template('start.html')
+    
+@app.route('/upload/<filename>')
+def send_image(filename):
+    return send_from_directory('uploads', filename)
+    
+@app.route('/index', methods=['GET'])
+def show_test():
+    image_name = os.listdir('uploads')
+    print(image_name)
+    return render_template('index.html', image_name=image_name)
 
+@app.route('/uploads', methods=['GET'])
+def show_images():
+    return render_template('test.html', image_name=image_names)
 
 if __name__ == '__main__':
     os.makedirs('uploads', exist_ok=True)
