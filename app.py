@@ -47,7 +47,12 @@ def send_image(filename):
 def show_test():
     image_name = os.listdir('uploads')
     print(image_name)
-    return render_template('index.html', image_name=image_name)
+    def split(a, n):
+        k, m = divmod(len(a), n)
+        return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
+    data = list(split(image_name, 4))
+    print(data)
+    return render_template('index.html', data=data)
 
 @app.route('/uploads', methods=['GET'])
 def show_images():
