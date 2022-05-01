@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+    Instagram-killer
+{% endblock %}
+{% block content %}
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    <h2> Photo gallery </h2>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <style>
+        .flex-column {
+          max-width: 250px;
+        }
+
+        img {
+          margin: 6px;
+        }
+      </style>
+    {% for file in files %}
+    <div class="d-flex flex-wrap justify-content-center">
+        <img src="{{url_for('static', filename='uploads/' + file)}}" align="middle">
+    </div>
+    {% endfor %}
+{% endblock %}

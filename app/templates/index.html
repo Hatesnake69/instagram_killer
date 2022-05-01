@@ -23,7 +23,7 @@
         {% for names in data %}
 		<div class="d-flex flex-column">
 			{% for name in names %}			
-				<img class="img-fluid" src="{{url_for('send_image', filename=name)}}">
+				<img class="img-fluid" src="{{url_for('static', filename='uploads/' + name)}}">
 			{% endfor %}
 		</div>
         {% endfor %}
