@@ -31,7 +31,7 @@ def main_page():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('upload_file', filename=filename))
+            return redirect(url_for('main_page'))
     file_names: list[str] = os.listdir('app/static/uploads')
     return render_template('main.html', files=file_names)
 
