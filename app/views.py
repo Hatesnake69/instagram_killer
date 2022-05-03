@@ -1,11 +1,12 @@
 import os
-
 from flask import flash, request, redirect, url_for, render_template
-
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 
-from app import app
+from app import app, db
 from .config import ALLOWED_EXTENSIONS
+from .models import User
 
 
 def allowed_file(filename):
@@ -14,7 +15,8 @@ def allowed_file(filename):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def upload_file():
+@login_required
+def main_page():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -34,17 +36,53 @@ def upload_file():
     return render_template('main.html', files=file_names)
 
 
-# @app.route('/start', methods=['GET'])
-# def show_start():
-#     return render_template('start.html')
-#
-#
-# @app.route('/upload/<filename>')
-# def send_image(filename):
-#     return send_from_directory('uploads', filename)
-#
-#
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    login = request.form.get('login')
+    password = request.form.get('password')
+
+    if login and password:
+        user = User.query.filter_by(login=login).first()
+
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            try:
+                next_page = request.args.get('next')
+                return redirect(next_page)
+            except Exception:
+                return redirect(url_for('main_page'))
+        else:
+            flash('Login or password is not correct')
+    else:
+        flash('Please fill login and password fields')
+
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    login = request.form.get('login')
+    password = request.form.get('password')
+    password2 = request.form.get('password2')
+
+    if request.method == 'POST':
+        if not (login or password or password2):
+            flash('Please, fill all fields!')
+        elif password != password2:
+            flash('Passwords are not equal!')
+        else:
+            hash_pwd = generate_password_hash(password)
+            new_user = User(login=login, password=hash_pwd)
+            db.session.add(new_user)
+            db.session.commit()
+
+            return redirect(url_for('login_page'))
+
+    return render_template('register.html')
+
+
 @app.route('/gallery', methods=['GET'])
+@login_required
 def show_gallery():
     image_name = os.listdir('app/static/uploads')
     print(image_name)
@@ -59,6 +97,16 @@ def show_gallery():
     return render_template('gallery.html', data=data)
 
 
-# @app.route('/uploads', methods=['GET'])
-# def show_images():
-#     return render_template('test.html', image_name=image_names)
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('main_page'))
+
+
+@app.after_request
+def redirect_to_signin(response):
+    if response.status_code == 401:
+        return redirect(url_for('login_page') + '?next=' + request.url)
+
+    return response
