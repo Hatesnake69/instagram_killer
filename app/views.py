@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from app import app, db
 from .config import ALLOWED_EXTENSIONS
-from .models import User
+from .models import User, Comment
 
 
 def allowed_file(filename):
@@ -102,6 +102,22 @@ def show_gallery():
 def logout():
     logout_user()
     return redirect(url_for('main_page'))
+ 
+ 
+@app.route('/image', methods=['GET'])
+def show_image():
+    res = Comment.query.all()
+    print(res)
+    return render_template('image.html', comments=Comment.query.all())
+
+  
+@app.route('/add_comment', methods=['POST'])
+def add_comment():
+    result = request.form
+    text = request.form['text']
+    db.session.add(Comment(text, 800))
+    db.session.commit()
+    return redirect(url_for('show_image'))
 
 
 @app.after_request

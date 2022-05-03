@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}
+    Instagram-killer
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+{% endblock %}
+
+
+{% block content %}
+	<header>
+	</header>
+	<section>
+		<div class="flex-container">
+			<img src="{{url_for('static', filename='photo-1651103324862-b5003ba7ae34.jpg')}}"/>
+			<div class="comments">
+				<h1>Comments:</h1>
+				{% for comment in comments %}
+					<div class="item">{{ comment.body }}</div>
+				{% endfor %}
+	    		<form method="post" action='/add_comment'>
+					<input type="text" name="text">
+					<button type="submit">Add Message</button>				
+				</form>
+    		</div>
+		</div>
+	</section>
+
+	<footer>
+		
+	</footer>
+
+{% endblock %}
